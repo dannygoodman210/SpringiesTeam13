@@ -12,7 +12,7 @@ import view.Canvas;
 /**
  * XXX.
  * 
- * @author Robert C. Duvall
+ * @author Henrique Moraes, Danny Goodman, Thomas Varner
  */
 public class Model {
     // bounds and input for game
@@ -46,7 +46,6 @@ public class Model {
     		gravity = new Vector(myEnvironment.getGravity());
     		gravity.scale(m.getMass());
     		m.setGravity(gravity);
-    		//m.setViscosityScale(myEnvironment.getViscosity());
     	}
     }
 

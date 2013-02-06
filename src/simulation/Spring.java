@@ -35,14 +35,14 @@ public class Spring extends Sprite {
         myK = kVal;
     }
 
-//    /**
-//     * XXX.
-//     */
-//    @Override
-//    public void paint (Graphics2D pen) {
-//        pen.setColor(getColor(myStart.distance(myEnd) - myLength));
-//        pen.drawLine((int)myStart.getX(), (int)myStart.getY(), (int)myEnd.getX(), (int)myEnd.getY());
-//    }
+    /**
+     * XXX.
+     */
+    @Override
+    public void paint (Graphics2D pen) {
+        pen.setColor(getColor(myStart.distance(myEnd) - myLength));
+        pen.drawLine((int)myStart.getX(), (int)myStart.getY(), (int)myEnd.getX(), (int)myEnd.getY());
+    }
 
     /**
      * XXX.
@@ -60,8 +60,7 @@ public class Spring extends Sprite {
         // update sprite values based on attached masses
         setCenter(getCenter(myStart, myEnd));
         setSize(getSize(myStart, myEnd));
-        setVelocity(Vector.angleBetween(dx, dy), 0);
-        //System.out.println(super.getCenter()); 
+        setVelocity(Vector.angleBetween(dx, dy), 0); 
     }
 
     /**

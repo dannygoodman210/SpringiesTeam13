@@ -7,8 +7,8 @@ import util.Location;
 
 /**
  * Class that contains general information about the constructor
- * It stores gravity, viscosity, and center of mass informations
- * @author Henrique
+ * It stores gravity, viscosity, center of mass, and  informations
+ * @author Henrique Moraes
  *
  */
 public class Environment {

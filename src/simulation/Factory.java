@@ -9,9 +9,11 @@ import java.util.Scanner;
 
 
 /**
- * XXX
+ * Loads all the information from the data files
+ * Passes all environment information to Environment class
+ * and creates the necessary masses, springs, and muscles
  * 
- * @author Robert C. Duvall
+ * @author Danny Goodman, Henrique Moraes, Thomas Varner
  */
 public class Factory {
     // data file keywords
@@ -52,6 +54,38 @@ public class Factory {
                     else if (VISCOSITY_KEYWORD.equals(type)){
                     	model.getEnvironment().setViscosity(viscosityCommand(line));
                     	//viscosityCommand(line);
+                    }
+                    else if (CENTER_MASS_KEYWORD.equals(type)){
+                    	model.getEnvironment().setCenterMass(centerMassCommand(line));
+                    }
+                    else if (WALL_KEYWORD.equals(type)){
+                    	model.getEnvironment().setWallStats(wallCommand(line));
+                    }
+                }
+            }
+            input.close();
+        }
+        catch (FileNotFoundException e) {
+            // should not happen because File came from user selection
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * XXX.
+     */
+    public void loadEnvironment (Model model, File modelFile) {
+        try {
+            Scanner input = new Scanner(modelFile);
+            while (input.hasNext()) {
+                Scanner line = new Scanner(input.nextLine());
+                if (line.hasNext()) {
+                    String type = line.next();
+                    if (GRAVITY_KEYWORD.equals(type)){
+                    	model.getEnvironment().setGravity(gravityCommand(line));
+                    }
+                    else if (VISCOSITY_KEYWORD.equals(type)){
+                    	model.getEnvironment().setViscosity(viscosityCommand(line));
                     }
                     else if (CENTER_MASS_KEYWORD.equals(type)){
                     	model.getEnvironment().setCenterMass(centerMassCommand(line));
@@ -104,28 +138,14 @@ public class Factory {
         double amplitude = line.nextDouble();
         return new Muscle(m1, m2, restLength, ks, amplitude);
     }
-    
-//    private void gravityCommand(Scanner line){
-//    	double angle = line.nextDouble();
-//    	double magnitude = line.nextDouble();
-//    	Mass.setGravityAngle(angle); 
-//    	Mass.setGravityMagnitude(magnitude); 
-//    }
-    
-    //added
+
     // add gravity information to Environment
     private Vector gravityCommand(Scanner line){
     	double angle = line.nextDouble();
     	double magnitude = line.nextDouble();
     	return new Vector(angle,magnitude);
     }
-    
-    
-//    public void viscosityCommand(Scanner line) { 
-//    	double scale_value = line.nextDouble(); 
-//    	Mass.setViscosityScale(scale_value); 
-//    }
-    
+
     // reads viscosity information to be added to environment
     private double viscosityCommand(Scanner line){
     	return line.nextDouble();

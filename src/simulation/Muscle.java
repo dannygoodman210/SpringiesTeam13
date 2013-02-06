@@ -4,6 +4,12 @@ import java.awt.Dimension;
 
 import util.Vector;
 
+
+/**
+ * 
+ * @author Danny Goodman
+ *
+ */
 public class Muscle extends Spring{
 
 	protected double myAmplitude;
@@ -21,18 +27,7 @@ public class Muscle extends Spring{
 	
 	public void update(double elapsedTime, Dimension bounds){
 		updateRestLength();
-		double dx = myStart.getX() - myEnd.getX();
-        double dy = myStart.getY() - myEnd.getY();
-        // apply hooke's law to each attached mass
-        Vector force = new Vector(Vector.angleBetween(dx, dy), 
-                                  myK * (myLength - Vector.distanceBetween(dx, dy)));
-        myStart.applyForce(force);
-        force.negate();
-        myEnd.applyForce(force);
-        // update sprite values based on attached masses
-        setCenter(getCenter(myStart, myEnd));
-        setSize(getSize(myStart, myEnd));
-        setVelocity(Vector.angleBetween(dx, dy), 0);
+		super.update(elapsedTime, bounds);
 	}
 
 	private void updateRestLength() {
