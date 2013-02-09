@@ -1,6 +1,6 @@
 gravity 90.0 0.000350169
-viscosity 0
-centermass 10 1
+viscosity 1
+centermass 0 0
 wall 1 0 0
 wall 2 0 0
 wall 3 0 0

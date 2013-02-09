@@ -22,6 +22,7 @@ public class Model {
     private List<Spring> mySprings;
     private Environment myEnvironment;
     private Mass myCenterMass;
+    private List<Environment> myEnvironmentForces;
 
     /**
      * Create a game of the given size with the given display for its shapes.
@@ -30,23 +31,37 @@ public class Model {
         myView = canvas;
         myMasses = new ArrayList<Mass>();
         mySprings = new ArrayList<Spring>();
-        myEnvironment = new Environment();
+        myEnvironmentForces = new ArrayList<Environment>();
     }
     
+//    /**
+//     * Sets the gravity vector and viscosity scaling factor for 
+//     * each mass according to its value. values are taken from 
+//     * environment information
+//     * it creates a new vector each time to prevent pointers referring
+//     * to the same vector
+//     */
+//    public void initMassParameters(){
+//    	Vector gravity;
+//    	for(Mass m : myMasses){
+//    		gravity = new Vector(myEnvironment.getGravity());
+//    		gravity.scale(m.getMass());
+//    		m.setGravity(gravity);
+//    	}
+//    }
+    
     /**
-     * Sets the gravity vector and viscosity scaling factor for 
-     * each mass according to its value. values are taken from 
-     * environment information
-     * it creates a new vector each time to prevent pointers referring
-     * to the same vector
+     * sets the current bounds of the view to Environment so subclasses
+     * can be aware of the new dimensions of the canvas
      */
-    public void initMassParameters(){
-    	Vector gravity;
-    	for(Mass m : myMasses){
-    		gravity = new Vector(myEnvironment.getGravity());
-    		gravity.scale(m.getMass());
-    		m.setGravity(gravity);
-    	}
+    public void updateBounds(){
+    	Environment.updateBounds(myView.getSize());
+//    	for(Environment f : myEnvironmentForces){
+//    		if (f instanceof WallRepulsionForce){
+//    			f = (WallRepulsionForce) f; 
+//    			f.setBounds(myView.getSize());
+//    		}
+//    	}
     }
 
     /**
@@ -72,7 +87,10 @@ public class Model {
         for (Spring s : mySprings) {
             s.update(elapsedTime, bounds);
         }
-        myCenterMass = myEnvironment.applyForces(myMasses, bounds);
+        for (Environment f : myEnvironmentForces){
+        	f.applyForce(myMasses);
+        }
+        //myCenterMass = myEnvironment.applyForces(myMasses, bounds);
         for (Mass m : myMasses) {
             m.update(elapsedTime, bounds);
         }
@@ -83,6 +101,13 @@ public class Model {
      */
     public void add (Mass mass) {
         myMasses.add(mass);
+    }
+    
+    /**
+     * Add given force to this simulation.
+     */
+    public void add (Environment force) {
+        myEnvironmentForces.add(force);
     }
     
     /**

@@ -21,13 +21,11 @@ public class Mass extends Sprite {
 
     private double myMass;
     private Vector myAcceleration; 
-    private Vector myGravity; 
 
     public Mass (double x, double y, double mass) {
         super(DEFUALT_IMAGE, new Location(x, y), DEFAULT_SIZE);
         myMass = mass;
         myAcceleration = new Vector();
-        myGravity = new Vector();
     }
     
     /**
@@ -42,25 +40,12 @@ public class Mass extends Sprite {
      */
     public Vector getAcceleration(){
     	return myAcceleration;
-    }
-    
-    /**
-     * sets the gravity vector for this mass
-     */
-    public void setGravity(Vector gravity){
-    	myGravity = gravity;
-    }
-    
-    /**
-     * Returns the gravity vector of this mass
-     */
-    public Vector getGravity(){
-    	return myGravity;
-    }
-	
+    }	
 	
     @Override
     public void update (double elapsedTime, Dimension bounds) {
+    	checkBoundaries(bounds);
+    	
     	applyForce(getBounce(bounds));
         // convert force back into Mover's velocity
         getVelocity().sum(myAcceleration);
@@ -71,7 +56,8 @@ public class Mass extends Sprite {
     
     /**
      * checks if mass tries to move out of the screen and keeps it
-     * within boundaries
+     * within boundaries. This method is an attempt to minimize the 
+     * bouncing bug
      */
     private void checkBoundaries(Dimension bounds){
     	double centerY = getCenter().y;

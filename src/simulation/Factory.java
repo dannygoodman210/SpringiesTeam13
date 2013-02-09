@@ -24,6 +24,11 @@ public class Factory {
     private static final String WALL_KEYWORD = "wall";
     private static final String CENTER_MASS_KEYWORD = "centermass";
     private static final String MUSCLE_KEYWORD = "muscle";
+    
+    //to ease constructing wall statuses
+    private static final double[] WALL_FORCE_DIRECTIONS =
+    	{WallRepulsionForce.DOWN_DIRECTION, WallRepulsionForce.LEFT_DIRECTION,
+    	WallRepulsionForce.UP_DIRECTION, WallRepulsionForce.RIGHT_DIRECTION};
 
     // mass IDs
     Map<Integer, Mass> myMasses = new HashMap<Integer, Mass>();
@@ -48,19 +53,6 @@ public class Factory {
                     else if (MUSCLE_KEYWORD.equals(type)) {
                         model.add(muscleCommand(line));
                     }
-                    else if (GRAVITY_KEYWORD.equals(type)){
-                    	model.getEnvironment().setGravity(gravityCommand(line));
-                    }
-                    else if (VISCOSITY_KEYWORD.equals(type)){
-                    	model.getEnvironment().setViscosity(viscosityCommand(line));
-                    	//viscosityCommand(line);
-                    }
-                    else if (CENTER_MASS_KEYWORD.equals(type)){
-                    	model.getEnvironment().setCenterMass(centerMassCommand(line));
-                    }
-                    else if (WALL_KEYWORD.equals(type)){
-                    	model.getEnvironment().setWallStats(wallCommand(line));
-                    }
                 }
             }
             input.close();
@@ -82,21 +74,21 @@ public class Factory {
                 if (line.hasNext()) {
                     String type = line.next();
                     if (GRAVITY_KEYWORD.equals(type)){
-                    	model.getEnvironment().setGravity(gravityCommand(line));
+                    	model.add(gravityCommand(line));
                     }
                     else if (VISCOSITY_KEYWORD.equals(type)){
-                    	model.getEnvironment().setViscosity(viscosityCommand(line));
+                    	model.add(viscosityCommand(line));
                     }
                     else if (CENTER_MASS_KEYWORD.equals(type)){
-                    	model.getEnvironment().setCenterMass(centerMassCommand(line));
+                    	model.add(centerMassCommand(line));
                     }
                     else if (WALL_KEYWORD.equals(type)){
-                    	model.getEnvironment().setWallStats(wallCommand(line));
+                    	model.add(wallCommand(line));
                     }
                 }
             }
             //added instantiates the gravity in masses
-            model.initMassParameters();
+            model.updateBounds();
             input.close();
         }
         catch (FileNotFoundException e) {
@@ -139,33 +131,36 @@ public class Factory {
         return new Muscle(m1, m2, restLength, ks, amplitude);
     }
 
-    // add gravity information to Environment
-    private Vector gravityCommand(Scanner line){
+    // add gravity information to the Model
+    private GravityForce gravityCommand(Scanner line){
     	double angle = line.nextDouble();
     	double magnitude = line.nextDouble();
-    	return new Vector(angle,magnitude);
+    	return new GravityForce(angle,magnitude);
     }
 
-    // reads viscosity information to be added to environment
-    private double viscosityCommand(Scanner line){
-    	return line.nextDouble();
+    // reads viscosity information
+    private ViscosityForce viscosityCommand(Scanner line){
+    	return new ViscosityForce(line.nextDouble());
     }
     
     // reads center of mass parameters
-    private double[] centerMassCommand(Scanner line){
-    	double[] centerStats = new double[2];
-    	centerStats[0] = line.nextDouble();
-    	centerStats[1] = line.nextDouble();
-    	return centerStats;
+    private CenterMassForce centerMassCommand(Scanner line){
+    	double magnitude = line.nextDouble();
+    	double exponent = line.nextDouble();
+    	return new CenterMassForce(magnitude, exponent);
     }
     
     // Reads wall parameters
-    private double[] wallCommand(Scanner line){
-    	double[] wallStats = new double[3];
-    	for(int i = 0; i<wallStats.length; i++){
-    		wallStats[i] = line.nextDouble();
-    	}
-    	return wallStats;
+    private WallRepulsionForce wallCommand(Scanner line){
+    	//double[] wallStats = new double[3];
+    	double ID = line.nextDouble();
+    	double magnitude = line.nextDouble();
+    	double exponent = line.nextDouble();
+//    	for(int i = 0; i<wallStats.length; i++){
+//    		wallStats[i] = line.nextDouble();
+//    	}
+    	return new WallRepulsionForce(ID, WALL_FORCE_DIRECTIONS[(int) (ID-1)],
+    			magnitude, exponent);
     }
     
 }

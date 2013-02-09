@@ -19,20 +19,20 @@ public class FixedMass extends Mass {
         
     }
 	
-    /**
-     * sets the gravity vector for this mass
-     */
-	@Override
-    public void setGravity(Vector gravity){
-    }
-    
-    /**
-     * Returns the gravity vector of this mass
-     */
-	@Override
-    public Vector getGravity(){
-    	return NO_ACCELERATION;
-    }
+//    /**
+//     * sets the gravity vector for this mass
+//     */
+//	@Override
+//    public void setGravity(Vector gravity){
+//    }
+//    
+//    /**
+//     * Returns the gravity vector of this mass
+//     */
+//	@Override
+//    public Vector getGravity(){
+//    	return NO_ACCELERATION;
+//    }
     
     /**
      * Use the given force to change this mass's acceleration.

@@ -2,9 +2,6 @@ package simulation;
 
 import java.awt.Dimension;
 
-import util.Vector;
-
-
 /**
  * 
  * @author Danny Goodman
@@ -22,7 +19,6 @@ public class Muscle extends Spring{
 		myAmplitude = amplitude;
 		myInitLength = initLength;
 		myPhase = 0;
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void update(double elapsedTime, Dimension bounds){
