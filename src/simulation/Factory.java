@@ -25,6 +25,15 @@ public class Factory {
     private static final String CENTER_MASS_KEYWORD = "centermass";
     private static final String MUSCLE_KEYWORD = "muscle";
     
+    // default values
+    private static final double DEFAULT_GRAVITY_DIRECTION = 90;
+    private static final double DEFAULT_GRAVITY_MAGNITUDE = 10;
+    private static final double DEFAULT_VISCOSITY_SCALE = .02;
+    private static final double DEFAULT_WALL_MAGNITUDE = 10;
+    private static final double DEFAULT_WALL_EXPONENT = 0;
+    private static final double DEFAULT_CENTERMASS_MAGNITUDE = 10;
+    private static final double DEFAULT_CENTERMASS_EXPONENT = 0;
+    
     //to ease constructing wall statuses
     private static final double[] WALL_FORCE_DIRECTIONS =
     	{WallRepulsionForce.DOWN_DIRECTION, WallRepulsionForce.LEFT_DIRECTION,
@@ -133,6 +142,9 @@ public class Factory {
 
     // add gravity information to the Model
     private GravityForce gravityCommand(Scanner line){
+    	if (!line.hasNextDouble()) 
+    		return new GravityForce(DEFAULT_GRAVITY_DIRECTION,DEFAULT_GRAVITY_MAGNITUDE);
+    	
     	double angle = line.nextDouble();
     	double magnitude = line.nextDouble();
     	return new GravityForce(angle,magnitude);
@@ -140,11 +152,17 @@ public class Factory {
 
     // reads viscosity information
     private ViscosityForce viscosityCommand(Scanner line){
+    	if (!line.hasNextDouble()) 
+    		return new ViscosityForce(DEFAULT_VISCOSITY_SCALE);
+    	
     	return new ViscosityForce(line.nextDouble());
     }
     
     // reads center of mass parameters
     private CenterMassForce centerMassCommand(Scanner line){
+    	if (!line.hasNextDouble()) 
+    		return new CenterMassForce(DEFAULT_CENTERMASS_MAGNITUDE,DEFAULT_CENTERMASS_EXPONENT);
+    	
     	double magnitude = line.nextDouble();
     	double exponent = line.nextDouble();
     	return new CenterMassForce(magnitude, exponent);
@@ -152,14 +170,14 @@ public class Factory {
     
     // Reads wall parameters
     private WallRepulsionForce wallCommand(Scanner line){
-    	//double[] wallStats = new double[3];
-    	double ID = line.nextDouble();
+    	int ID = line.nextInt();
+    	if (!line.hasNextDouble()) 
+    		return new WallRepulsionForce(ID, WALL_FORCE_DIRECTIONS[ID-1],
+    				DEFAULT_WALL_MAGNITUDE,DEFAULT_WALL_EXPONENT);
+    	
     	double magnitude = line.nextDouble();
     	double exponent = line.nextDouble();
-//    	for(int i = 0; i<wallStats.length; i++){
-//    		wallStats[i] = line.nextDouble();
-//    	}
-    	return new WallRepulsionForce(ID, WALL_FORCE_DIRECTIONS[(int) (ID-1)],
+    	return new WallRepulsionForce(ID, WALL_FORCE_DIRECTIONS[ID-1],
     			magnitude, exponent);
     }
     

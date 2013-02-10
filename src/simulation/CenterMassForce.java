@@ -20,6 +20,7 @@ public class CenterMassForce extends Environment {
 	public CenterMassForce(double magnitude, double exponent){
 		myMagnitude = magnitude;
 		myExponentialIndex = exponent;
+		myName = "Center Mass";
 	}
 	
 	/**
@@ -33,18 +34,21 @@ public class CenterMassForce extends Environment {
 	 * Calculates the vector that represents the force exerted by 
 	 * the center of mass
 	 * Applies the force exerted by the center of mass to each mass
+	 * Does not apply force if isForceOn is off
 	 */
 	public void applyForce(List<Mass> masses){
-		myCenterMass = calculateCenterOfMass(masses);
-		Location centerLocation = myCenterMass.getCenter();
-		for(Mass m : masses){
-			double distance = myCenterMass.distance(m);
-			double Force = myMagnitude/
-					(Math.pow(distance, myExponentialIndex));
-			Vector massesDirection = new Vector(m.getCenter(),centerLocation);
-			Vector vectorForce = new Vector(massesDirection.getDirection(),
-				Force);
-			m.applyForce(vectorForce);
+		if(isForceOn){
+			myCenterMass = calculateCenterOfMass(masses);
+			Location centerLocation = myCenterMass.getCenter();
+			for(Mass m : masses){
+				double distance = myCenterMass.distance(m);
+				double Force = myMagnitude/
+						(Math.pow(distance, myExponentialIndex));
+				Vector massesDirection = new Vector(m.getCenter(),centerLocation);
+				Vector vectorForce = new Vector(massesDirection.getDirection(),
+						Force);
+				m.applyForce(vectorForce);
+			}
 		}
 	}
 	

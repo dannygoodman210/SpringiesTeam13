@@ -15,6 +15,7 @@ public class GravityForce extends Environment{
 	
 	public GravityForce(double angle, double magnitude){
 		myGravity = new Vector(angle, magnitude);
+		myName = "Gravity";
 	}
 	
 	/**
@@ -34,12 +35,15 @@ public class GravityForce extends Environment{
 	/**
 	 * Applies the gravity force on each mass according to the mass'
 	 * self gravity vector
+	 * Does not apply force if isForceOn is off
 	 */
 	public void applyForce(List<Mass> masses){
-		for(Mass m : masses){
-			Vector massGravity = new Vector(myGravity);
-			massGravity.scale(m.getMass());
-			m.applyForce(massGravity);
+		if(isForceOn){
+			for(Mass m : masses){
+				Vector massGravity = new Vector(myGravity);
+				massGravity.scale(m.getMass());
+				m.applyForce(massGravity);
+			}
 		}
 	}
 

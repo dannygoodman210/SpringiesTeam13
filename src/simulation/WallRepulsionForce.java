@@ -19,25 +19,36 @@ public class WallRepulsionForce extends Environment{
 	public static final double RIGHT_DIRECTION = 0;
 	
 	private double myForceDirection;
-	private double myID;
+	private int myID;
 	private double myMagnitude;
 	private double myExponentialIndex;
 	
-	public WallRepulsionForce(double ID, double direction,
+	public WallRepulsionForce(int ID, double direction,
 			double magnitude, double exponent){
 		myID = ID;
 		myForceDirection = direction;
 		myMagnitude = magnitude;
 		myExponentialIndex = exponent;
+		myName = "Wall "+myID;
 	}
 	
 	/**
 	 * Calculates and applies wall repulsion force to each mass
+	 * Does not apply force if isForceOn is off
 	 */
 	public void applyForce(List<Mass> masses){
-		for(Mass m : masses){
-			m.applyForce(calculateWallRepulsion(m));
+		if(isForceOn){
+			for(Mass m : masses){
+				m.applyForce(calculateWallRepulsion(m));
+			}
 		}
+	}
+	
+	/**
+	 * Retrieve the ID of this wall
+	 */
+	public int getID(){
+		return myID;
 	}
 
 	/**

@@ -16,6 +16,7 @@ public class ViscosityForce extends Environment{
 	
 	public ViscosityForce(double viscosity){
 		myViscosity = viscosity;
+		myName = "Viscosity";
 	}
 	
 	/**
@@ -36,13 +37,16 @@ public class ViscosityForce extends Environment{
 	 * Receives the list of masses and applies the viscosity force
 	 * on the current acceleration of the mass. The viscosity is 
 	 * a scaled opposing vector to the acceleration of the mass
+	 * Does not apply force if isForceOn is off
 	 */
 	public void applyForce(List<Mass> masses) { 
-		for (Mass m : masses){
-			Vector viscosity = new Vector(m.getAcceleration());
-			viscosity.negate(); 
-			viscosity.scale(myViscosity); 
-			m.applyForce(viscosity);
+		if(isForceOn){
+			for (Mass m : masses){
+				Vector viscosity = new Vector(m.getVelocity());
+				viscosity.negate(); 
+				viscosity.scale(myViscosity); 
+				m.applyForce(viscosity);
+			}
 		}
 	}
 }
