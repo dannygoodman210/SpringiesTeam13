@@ -11,7 +11,7 @@ import view.Canvas;
 
 /**
  * Class created to handle the inputs of the game
- * @author Henrique Moraes
+ * @author Henrique Moraes, Thomas Varner 
  *
  */
 public class Control {
@@ -20,10 +20,12 @@ public class Control {
 	
 	private int keyCounter = 0;
 	private Canvas myView;
+	private Factory myFactory; 
 	
 	private int pixelsToResize = 0;
 	private int colorCounter = 0;
 	private String myToggledForceName = "";
+	private String clearAssemblyLabel = ""; 
 	private String myLastToggleStatus;
 	private Text myStatus = new Text("");
 	
@@ -32,8 +34,9 @@ public class Control {
     private ViscosityForce myViscosityForce;
     private WallRepulsionForce[] myWallRepulsionForces;
 	
-    public Control(Canvas canvas){
+    public Control(Canvas canvas, Factory factory){
     	myView = canvas;
+    	myFactory = factory; 
     	myWallRepulsionForces = new WallRepulsionForce[4];
     }
     
@@ -65,6 +68,7 @@ public class Control {
     	if(colorCounter > 255){
         	colorCounter = 0;
         	myToggledForceName = "";
+        	clearAssemblyLabel = ""; 
         }
         if(myToggledForceName.length() != 0){
         	myStatus.setText(myToggledForceName + " " + myLastToggleStatus);
@@ -72,6 +76,12 @@ public class Control {
         			new Color(colorCounter,colorCounter,colorCounter));
         	colorCounter += 8;
         }
+        if(clearAssemblyLabel.length() != 0){
+        	myStatus.setText(clearAssemblyLabel);
+        	myStatus.paint(pen, new Point(myView.getWidth()/2,myView.getHeight()/2), 
+        			new Color(colorCounter,colorCounter,colorCounter));
+        	colorCounter += 8;
+        } 
     }
     
     /**
@@ -80,7 +90,12 @@ public class Control {
     public void update(){
     	keyCounter++;
     	checkInputs();
-    	checkResize(myView.getSize());
+    	checkResize(myView.getSize()); 
+    }
+    
+    public void clear() { 
+    	clearAssemblyLabel = "Assemblies Cleared"; 
+    	myFactory.clear(); 
     }
     
 	/**
@@ -91,6 +106,7 @@ public class Control {
 	    	if(keyCounter < 6) return;
 	    	
 	    	int key = myView.getLastKeyPressed();
+	    	 
 	    	Environment toggledForce = null;
 
 	    	if (key == KeyEvent.VK_G) {
@@ -122,7 +138,14 @@ public class Control {
 	    		//Need constant??
 	    		pixelsToResize = -10;
 	    	}
-
+	    	else if (key == KeyEvent.VK_N) { 
+	    		//resets last key back to -1 so that the game can continue 
+	    		myView.resetLastKey();   
+	    		myFactory.loadNewModel();
+	    	}
+	    	else if (key == KeyEvent.VK_C) { 
+	    		clear(); 
+	    	}
 	    	if(toggledForce != null){
 	    		myToggledForceName = toggledForce.getName();
 	    		myLastToggleStatus = toggledForce.isOnOff();
