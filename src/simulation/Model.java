@@ -1,15 +1,11 @@
 package simulation;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.ArrayList;
 
-import util.Text;
-import util.Vector;
 import view.Canvas;
 
 
@@ -19,17 +15,19 @@ import view.Canvas;
  * @author Henrique Moraes, Danny Goodman, Thomas Varner
  */
 public class Model {
-	
+	//constants for mouse dragging
+    private static final double DEFAULT_MASS = 10;
+    private static final double DEFAULT_KVAL = 0.5;
+    // for mouse dragging
+    private boolean mouseDragging;
+    private Spring myMouseSpring;
     // bounds and input for game
     private Canvas myView; 
-    
     // simulation state
     private List<Mass> myMasses;
     private List<Spring> mySprings;
     private List<Environment> myEnvironmentForces;
-    //private Control myControl;
-    private boolean mouseDragging;
-    private Spring myMouseSpring;
+    // control environment forces
     private Control myControl;
 
     /**
@@ -81,6 +79,17 @@ public class Model {
         for (Mass m : myMasses) {
             m.update(elapsedTime, bounds);
         }
+        if (myView.getMousePressed()&&!mouseDragging){
+            createMouseSpring();
+            mouseDragging = true;
+        }
+        if(mouseDragging){
+            if(!myView.getMousePressed()){
+                mouseDragging = false;
+                mySprings.remove(myMouseSpring);
+            }
+            updateDrag(myView.getLastMousePosition());
+        }
         
         myControl.update(myEnvironmentForces);
     }
@@ -110,5 +119,33 @@ public class Model {
     public void clear () { 
     	myMasses.clear(); 
     	mySprings.clear(); 
+    }
+
+    // Four private methods for Mouse Dragging
+    private void createMouseSpring() {
+        Point mouseLocation = myView.getLastMousePosition();
+        Mass mass = findClosestMass(mouseLocation);
+        myMouseSpring = new Spring(mass,
+                new Mass(myView.getLastMousePosition(),DEFAULT_MASS),
+                massDist(mass,mouseLocation),DEFAULT_KVAL);
+        mySprings.add(myMouseSpring);
+    }
+
+    private double massDist(Mass mass, Point mouseLocation) {
+        return mouseLocation.distance(mass.getX(),mass.getY());
+    }
+
+    private Mass findClosestMass(Point mouseLocation) {
+        Mass closeMass = myMasses.get(0);
+        for(Mass m:myMasses){
+            if(massDist(m,mouseLocation) < massDist(closeMass,mouseLocation))
+                closeMass = m;
+        }
+        return closeMass;
+    }
+    
+    private void updateDrag(Point mouseLocation){
+        myMouseSpring.getEndMass().setCenter(
+                mouseLocation.getX(), mouseLocation.getY());
     }
 }

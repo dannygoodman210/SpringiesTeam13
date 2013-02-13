@@ -3,6 +3,8 @@ package simulation;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
+
 import util.Location;
 import util.Pixmap;
 import util.Sprite;
@@ -12,7 +14,7 @@ import util.Vector;
 /**
  * XXX.
  * 
- * @author Henrique Moraes, Thomas Varner
+ * @author Henrique Moraes, Thomas Varner, Danny Goodman
  */
 public class Mass extends Sprite {    
     // reasonable default values
@@ -26,6 +28,11 @@ public class Mass extends Sprite {
         super(DEFUALT_IMAGE, new Location(x, y), DEFAULT_SIZE);
         myMass = mass;
         myAcceleration = new Vector();
+    }
+
+    // alternate constructor for given Point
+    public Mass(Point xy, double mass){
+        this(xy.x,xy.y,mass);
     }
     
     /**

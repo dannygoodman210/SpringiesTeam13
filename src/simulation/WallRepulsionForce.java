@@ -1,6 +1,5 @@
 package simulation;
 
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.List;
 

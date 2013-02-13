@@ -35,6 +35,14 @@ public class Spring extends Sprite {
         myK = kVal;
     }
 
+        /**
+     * return the end mass of the spring.
+     * @return 
+     */
+    public Mass getEndMass(){
+        return myEnd;
+    }
+
     /**
      * XXX.
      */
