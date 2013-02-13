@@ -30,7 +30,6 @@ import simulation.Model;
  *   <LI>mouse input via the MouseListener and MouseMotionListener
  *   <LI>keyboard input via the KeyListener
  * </UL>
- * 
  * @author Henrique Moraes, Danny Goodman, Thomas Varner
  */
 public class Canvas extends JComponent {
@@ -55,11 +54,10 @@ public class Canvas extends JComponent {
     // input state
     private int myLastKeyPressed;
     private Point myLastMousePosition;
+    private boolean myMousePressed;
     private Set<Integer> myKeys;
     // new elements to be created
-    private Factory myFactory;
     private boolean isEnvironmentLoaded = false;
-
     /**
      * Create a panel so that it knows its size
      */
@@ -97,6 +95,12 @@ public class Canvas extends JComponent {
      */
     public int getLastKeyPressed () {
         return myLastKeyPressed;
+    }  
+    /**
+     * Returns if mouse is being pressed.
+     */
+    public boolean getMousePressed () {
+        return myMousePressed;
     }
 
     /**
@@ -124,8 +128,6 @@ public class Canvas extends JComponent {
                     step();
                 }
             });
-        Factory factory = new Factory();
-        myFactory = factory; 
         // start animation
         mySimulation = new Model(this);
         loadModel();
@@ -137,12 +139,6 @@ public class Canvas extends JComponent {
      */
     public void stop () {
         myTimer.stop();
-    }
-    /*
-     * Starts the timer again
-     */
-    public void startAgain () { 
-    	myTimer.start(); 
     }
 
     /**
@@ -174,6 +170,7 @@ public class Canvas extends JComponent {
             }
         });
         myLastMousePosition = NO_MOUSE_PRESSED;
+        myMousePressed = false;
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged (MouseEvent e) {
@@ -184,26 +181,29 @@ public class Canvas extends JComponent {
             @Override
             public void mousePressed (MouseEvent e) {
                 myLastMousePosition = e.getPoint();
+                myMousePressed = true;
             }
 
             @Override
             public void mouseReleased (MouseEvent e) {
-                myLastMousePosition = NO_MOUSE_PRESSED;
+                myLastMousePosition = e.getPoint();
+                myMousePressed = false;
             }
         });
     }
 
     // load model from file chosen by user
     public void loadModel () {
+        Factory factory = new Factory();
         int response = INPUT_CHOOSER.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
-            myFactory.loadModel(mySimulation, INPUT_CHOOSER.getSelectedFile());
+            factory.loadModel(mySimulation, INPUT_CHOOSER.getSelectedFile());
         }
         myLastKeyPressed = NO_KEY_PRESSED;
         if (isEnvironmentLoaded) { return; }
         response = INPUT_CHOOSER.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
-        	myFactory.loadEnvironment(mySimulation, INPUT_CHOOSER.getSelectedFile());
+        	factory.loadEnvironment(mySimulation, INPUT_CHOOSER.getSelectedFile());
         	isEnvironmentLoaded = true;
         }
     }
