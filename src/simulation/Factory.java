@@ -7,6 +7,8 @@ import java.util.Map;
 import util.Vector;
 import java.util.Scanner;
 
+import javax.swing.JFileChooser;
+
 
 /**
  * Loads all the information from the data files
@@ -34,6 +36,9 @@ public class Factory {
     private static final double DEFAULT_CENTERMASS_MAGNITUDE = 10;
     private static final double DEFAULT_CENTERMASS_EXPONENT = 0;
     
+    private static final JFileChooser INPUT_CHOOSER = 
+            new JFileChooser(System.getProperties().getProperty("user.dir"));
+    
     //to ease constructing wall statuses
     private static final double[] WALL_FORCE_DIRECTIONS =
     	{WallRepulsionForce.DOWN_DIRECTION, WallRepulsionForce.LEFT_DIRECTION,
@@ -42,25 +47,27 @@ public class Factory {
     // mass IDs
     Map<Integer, Mass> myMasses = new HashMap<Integer, Mass>();
 
-
+    private Model myModel; 
+    
     /**
      * XXX.
      */
     public void loadModel (Model model, File modelFile) {
         try {
+        	myModel = model; 
             Scanner input = new Scanner(modelFile);
             while (input.hasNext()) {
                 Scanner line = new Scanner(input.nextLine());
                 if (line.hasNext()) {
                     String type = line.next();
                     if (MASS_KEYWORD.equals(type)) {
-                        model.add(massCommand(line));
+                        myModel.add(massCommand(line));
                     }
                     else if (SPRING_KEYWORD.equals(type)) {
-                        model.add(springCommand(line));
+                        myModel.add(springCommand(line));
                     }
                     else if (MUSCLE_KEYWORD.equals(type)) {
-                        model.add(muscleCommand(line));
+                        myModel.add(muscleCommand(line));
                     }
                 }
             }
@@ -103,6 +110,20 @@ public class Factory {
         catch (FileNotFoundException e) {
             // should not happen because File came from user selection
             e.printStackTrace();
+        }
+    }
+    
+    public void clear() { 
+    	myModel.clear(); 
+    }
+    
+    /*
+     * loads additional model objects from file 
+     */
+    public void loadNewModel() { 
+    	int response = INPUT_CHOOSER.showOpenDialog(null);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            loadModel(myModel, INPUT_CHOOSER.getSelectedFile());
         }
     }
 

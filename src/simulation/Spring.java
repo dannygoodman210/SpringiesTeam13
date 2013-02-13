@@ -12,7 +12,7 @@ import util.Vector;
 /**
  * XXX.
  * 
- * @author Robert C. Duvall, Danny Goodman
+ * @author Robert C. Duvall
  */
 public class Spring extends Sprite {
     // reasonable default values
@@ -33,14 +33,6 @@ public class Spring extends Sprite {
         myEnd = end;
         myLength = length;
         myK = kVal;
-    }
-    
-    /**
-     * return the end mass of the spring.
-     * @return 
-     */
-    public Mass getEndMass(){
-    	return myEnd;
     }
 
     /**
