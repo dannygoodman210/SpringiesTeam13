@@ -31,7 +31,7 @@ import simulation.Model;
  *   <LI>keyboard input via the KeyListener
  * </UL>
  * 
- * @author Robert C Duvall
+ * @author Robert C Duvall, Danny Goodman
  */
 public class Canvas extends JComponent {
     // default serialization ID
@@ -55,9 +55,9 @@ public class Canvas extends JComponent {
     // input state
     private int myLastKeyPressed;
     private Point myLastMousePosition;
+    private boolean myMousePressed;
     private Set<Integer> myKeys;
-    // new elements to be created
-    private Factory myFactory; 
+
 
     /**
      * Create a panel so that it knows its size
@@ -97,14 +97,15 @@ public class Canvas extends JComponent {
     public int getLastKeyPressed () {
         return myLastKeyPressed;
     }
-
-    /*
-     * Resets the value of the last key. This was particularly useful
-     * with key listener interaction with the dialogue box
+    
+    /**
+     * Returns if mouse is being pressed.
      */
-    public void resetLastKey () { 
-    	myLastKeyPressed = -1; 
+    public boolean getMousePressed () {
+        return myMousePressed;
     }
+
+
     /**
      * Returns all keys currently pressed by the user.
      */
@@ -130,10 +131,8 @@ public class Canvas extends JComponent {
                     step();
                 }
             });
-        Factory factory = new Factory();
-        myFactory = factory; 
         // start animation
-        mySimulation = new Model(this, myFactory);
+        mySimulation = new Model(this);
         loadModel();
         myTimer.start();
     }
@@ -143,12 +142,6 @@ public class Canvas extends JComponent {
      */
     public void stop () {
         myTimer.stop();
-    }
-    /*
-     * Starts the timer again
-     */
-    public void startAgain () { 
-    	myTimer.start(); 
     }
 
     /**
@@ -165,8 +158,7 @@ public class Canvas extends JComponent {
      */
     private void setInputListeners () {
         // initialize input state
-    	
-    	myLastKeyPressed = NO_KEY_PRESSED;
+        myLastKeyPressed = NO_KEY_PRESSED;
         myKeys = new TreeSet<Integer>();
         addKeyListener(new KeyAdapter() {
             @Override
@@ -181,6 +173,7 @@ public class Canvas extends JComponent {
             }
         });
         myLastMousePosition = NO_MOUSE_PRESSED;
+        myMousePressed = false;
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged (MouseEvent e) {
@@ -191,24 +184,27 @@ public class Canvas extends JComponent {
             @Override
             public void mousePressed (MouseEvent e) {
                 myLastMousePosition = e.getPoint();
+                myMousePressed = true;
             }
 
             @Override
             public void mouseReleased (MouseEvent e) {
-                myLastMousePosition = NO_MOUSE_PRESSED;
+                myLastMousePosition = e.getPoint();
+                myMousePressed = false;
             }
         });
     }
 
     // load model from file chosen by user
     private void loadModel () {
+        Factory factory = new Factory();
         int response = INPUT_CHOOSER.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
-            myFactory.loadModel(mySimulation, INPUT_CHOOSER.getSelectedFile());
+            factory.loadModel(mySimulation, INPUT_CHOOSER.getSelectedFile());
         }
         response = INPUT_CHOOSER.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
-        	myFactory.loadEnvironment(mySimulation, INPUT_CHOOSER.getSelectedFile());
+        	factory.loadEnvironment(mySimulation, INPUT_CHOOSER.getSelectedFile());
         }
     }
 }
