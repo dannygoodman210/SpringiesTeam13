@@ -12,7 +12,7 @@ import util.Vector;
 /**
  * XXX.
  * 
- * @author Robert C. Duvall
+ * @author Robert C. Duvall, Danny Goodman
  */
 public class Spring extends Sprite {
     // reasonable default values

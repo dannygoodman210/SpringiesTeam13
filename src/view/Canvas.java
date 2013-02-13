@@ -26,10 +26,11 @@ import simulation.Model;
 /**
  * Creates an area of the screen in which the game will be drawn that supports:
  * <UL>
- *   <LI>animation via the Timer
- *   <LI>mouse input via the MouseListener and MouseMotionListener
- *   <LI>keyboard input via the KeyListener
+ * <LI>animation via the Timer
+ * <LI>mouse input via the MouseListener and MouseMotionListener
+ * <LI>keyboard input via the KeyListener
  * </UL>
+ * 
  * @author Henrique Moraes, Danny Goodman, Thomas Varner
  */
 public class Canvas extends JComponent {
@@ -41,7 +42,7 @@ public class Canvas extends JComponent {
     public static final int ONE_SECOND = 1000;
     public static final int DEFAULT_DELAY = ONE_SECOND / FRAMES_PER_SECOND;
     // only one so that it maintains user's preferences
-    private static final JFileChooser INPUT_CHOOSER = 
+    private static final JFileChooser INPUT_CHOOSER =
             new JFileChooser(System.getProperties().getProperty("user.dir"));
     // input state
     public static final Point NO_MOUSE_PRESSED = null;
@@ -58,6 +59,7 @@ public class Canvas extends JComponent {
     private Set<Integer> myKeys;
     // new elements to be created
     private boolean isEnvironmentLoaded = false;
+
     /**
      * Create a panel so that it knows its size
      */
@@ -95,7 +97,8 @@ public class Canvas extends JComponent {
      */
     public int getLastKeyPressed () {
         return myLastKeyPressed;
-    }  
+    }
+
     /**
      * Returns if mouse is being pressed.
      */
@@ -122,12 +125,12 @@ public class Canvas extends JComponent {
      */
     public void start () {
         // create a timer to animate the canvas
-        myTimer = new Timer(DEFAULT_DELAY, 
-            new ActionListener() {
-                public void actionPerformed (ActionEvent e) {
-                    step();
-                }
-            });
+        myTimer = new Timer(DEFAULT_DELAY,
+                            new ActionListener() {
+                                public void actionPerformed (ActionEvent e) {
+                                    step();
+                                }
+                            });
         // start animation
         mySimulation = new Model(this);
         loadModel();
@@ -145,7 +148,7 @@ public class Canvas extends JComponent {
      * Take one step in the animation.
      */
     public void step () {
-        mySimulation.update((double)FRAMES_PER_SECOND / ONE_SECOND);
+        mySimulation.update((double) FRAMES_PER_SECOND / ONE_SECOND);
         // indirectly causes paint to be called
         repaint();
     }
@@ -155,7 +158,7 @@ public class Canvas extends JComponent {
      */
     private void setInputListeners () {
         // initialize input state
-    	myLastKeyPressed = NO_KEY_PRESSED;
+        myLastKeyPressed = NO_KEY_PRESSED;
         myKeys = new TreeSet<Integer>();
         addKeyListener(new KeyAdapter() {
             @Override
@@ -163,10 +166,11 @@ public class Canvas extends JComponent {
                 myLastKeyPressed = e.getKeyCode();
                 myKeys.add(e.getKeyCode());
             }
+
             @Override
             public void keyReleased (KeyEvent e) {
                 myLastKeyPressed = NO_KEY_PRESSED;
-                myKeys.remove((Integer)e.getKeyCode());
+                myKeys.remove((Integer) e.getKeyCode());
             }
         });
         myLastMousePosition = NO_MOUSE_PRESSED;
