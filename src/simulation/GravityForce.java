@@ -2,34 +2,35 @@ package simulation;
 
 import java.awt.event.KeyEvent;
 import java.util.List;
-
 import util.Vector;
+
 
 /**
  * Class that represents the gravity vector and its functionalities
+ * 
  * @author Henrique Moraes
- *
+ * 
  */
-public class GravityForce extends Environment{
+public class GravityForce extends Environment {
 
     private Vector myGravity;
 
-    public GravityForce(double angle, double magnitude){
+    public GravityForce (double angle, double magnitude) {
         myGravity = new Vector(angle, magnitude);
         myName = "Gravity";
     }
 
     /**
-     * Receives a gravity vector and assigns it to its private variable 
+     * Receives a gravity vector and assigns it to its private variable
      */
-    public void setGravity(Vector gravity){
+    public void setGravity (Vector gravity) {
         myGravity = gravity;
     }
 
     /**
      * Returns gravity vector to the caller
      */
-    public Vector getGravity(){
+    public Vector getGravity () {
         return myGravity;
     }
 
@@ -38,8 +39,8 @@ public class GravityForce extends Environment{
      * self gravity vector
      * Does not apply force if isForceOn is off
      */
-    public void applyForce(List<Mass> masses){
-        if(!isForceOn) { return; }
+    public void applyForce (List<Mass> masses) {
+        if (!isForceOn) { return; }
         for (Mass m : masses) {
             Vector massGravity = new Vector(myGravity);
             massGravity.scale(m.getMass());
@@ -48,7 +49,7 @@ public class GravityForce extends Environment{
     }
 
     @Override
-    public final Environment toggleForce(final int key) {
+    public final Environment toggleForce (final int key) {
         if (!(key == KeyEvent.VK_G)) { return null; }
         isForceOn = !isForceOn;
         return this;

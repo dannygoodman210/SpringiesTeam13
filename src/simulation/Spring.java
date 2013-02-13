@@ -41,7 +41,8 @@ public class Spring extends Sprite {
     @Override
     public void paint (Graphics2D pen) {
         pen.setColor(getColor(myStart.distance(myEnd) - myLength));
-        pen.drawLine((int)myStart.getX(), (int)myStart.getY(), (int)myEnd.getX(), (int)myEnd.getY());
+        pen.drawLine((int) myStart.getX(), (int) myStart.getY(), (int) myEnd.getX(),
+                     (int) myEnd.getY());
     }
 
     /**
@@ -52,7 +53,7 @@ public class Spring extends Sprite {
         double dx = myStart.getX() - myEnd.getX();
         double dy = myStart.getY() - myEnd.getY();
         // apply hooke's law to each attached mass
-        Vector force = new Vector(Vector.angleBetween(dx, dy), 
+        Vector force = new Vector(Vector.angleBetween(dx, dy),
                                   myK * (myLength - Vector.distanceBetween(dx, dy)));
         myStart.applyForce(force);
         force.negate();
@@ -60,15 +61,17 @@ public class Spring extends Sprite {
         // update sprite values based on attached masses
         setCenter(getCenter(myStart, myEnd));
         setSize(getSize(myStart, myEnd));
-        setVelocity(Vector.angleBetween(dx, dy), 0); 
+        setVelocity(Vector.angleBetween(dx, dy), 0);
     }
 
     /**
      * Convenience method.
      */
     protected Color getColor (double diff) {
-        if (Vector.fuzzyEquals(diff, 0)) return Color.BLACK;
-        else if (diff < 0.0) return Color.BLUE;
+        if (Vector.fuzzyEquals(diff, 0))
+            return Color.BLACK;
+        else if (diff < 0.0)
+            return Color.BLUE;
         else return Color.RED;
     }
 
@@ -79,6 +82,6 @@ public class Spring extends Sprite {
 
     // compute size of this spring
     protected static Dimension getSize (Mass start, Mass end) {
-        return new Dimension((int)start.distance(end), IMAGE_HEIGHT);
+        return new Dimension((int) start.distance(end), IMAGE_HEIGHT);
     }
 }

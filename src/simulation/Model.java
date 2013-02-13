@@ -7,7 +7,6 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.ArrayList;
-
 import util.Text;
 import util.Vector;
 import view.Canvas;
@@ -19,15 +18,15 @@ import view.Canvas;
  * @author Henrique Moraes, Danny Goodman, Thomas Varner
  */
 public class Model {
-	
+
     // bounds and input for game
-    private Canvas myView; 
-    
+    private Canvas myView;
+
     // simulation state
     private List<Mass> myMasses;
     private List<Spring> mySprings;
     private List<Environment> myEnvironmentForces;
-    //private Control myControl;
+    // private Control myControl;
     private boolean mouseDragging;
     private Spring myMouseSpring;
     private Control myControl;
@@ -43,13 +42,13 @@ public class Model {
         myControl = new Control(myView);
         mouseDragging = false;
     }
-    
+
     /**
      * sets the current bounds of the view to Environment so subclasses
      * can be aware of the new dimensions of the canvas
      */
-    public void updateBounds(){
-    	Environment.updateBounds(myView.getSize());
+    public void updateBounds () {
+        Environment.updateBounds(myView.getSize());
     }
 
     /**
@@ -61,9 +60,9 @@ public class Model {
         }
 
         for (Mass m : myMasses) {
-        	m.paint(pen);
+            m.paint(pen);
         }
-        
+
         myControl.paint(pen);
     }
 
@@ -75,13 +74,13 @@ public class Model {
         for (Spring s : mySprings) {
             s.update(elapsedTime, bounds);
         }
-        for (Environment f : myEnvironmentForces){
-        	f.applyForce(myMasses);
+        for (Environment f : myEnvironmentForces) {
+            f.applyForce(myMasses);
         }
         for (Mass m : myMasses) {
             m.update(elapsedTime, bounds);
         }
-        
+
         myControl.update(myEnvironmentForces);
     }
 
@@ -91,9 +90,9 @@ public class Model {
     public void add (Mass mass) {
         myMasses.add(mass);
     }
-    
+
     /**
-     * Add given force to the list of this simulation and make 
+     * Add given force to the list of this simulation and make
      * an individual reference to it
      */
     public void add (Environment force) {
@@ -106,9 +105,9 @@ public class Model {
     public void add (Spring spring) {
         mySprings.add(spring);
     }
-    
-    public void clear () { 
-    	myMasses.clear(); 
-    	mySprings.clear(); 
+
+    public void clear () {
+        myMasses.clear();
+        mySprings.clear();
     }
 }

@@ -14,63 +14,63 @@ import util.Vector;
  * 
  * @author Henrique Moraes, Thomas Varner
  */
-public class Mass extends Sprite {    
+public class Mass extends Sprite {
     // reasonable default values
     public static final Dimension DEFAULT_SIZE = new Dimension(16, 16);
     public static final Pixmap DEFUALT_IMAGE = new Pixmap("mass.gif");
 
     private double myMass;
-    private Vector myAcceleration; 
+    private Vector myAcceleration;
 
     public Mass (double x, double y, double mass) {
         super(DEFUALT_IMAGE, new Location(x, y), DEFAULT_SIZE);
         myMass = mass;
         myAcceleration = new Vector();
     }
-    
+
     /**
      * @return mass of this mass
      */
-    public double getMass() { 
-    	return myMass; 
+    public double getMass () {
+        return myMass;
     }
-    
+
     /**
      * Returns the acceleration vector of this mass
      */
-    public Vector getAcceleration(){
-    	return myAcceleration;
-    }	
-	
+    public Vector getAcceleration () {
+        return myAcceleration;
+    }
+
     @Override
     public void update (double elapsedTime, Dimension bounds) {
-    	checkBoundaries(bounds);
-    	
-    	applyForce(getBounce(bounds));
+        checkBoundaries(bounds);
+
+        applyForce(getBounce(bounds));
         // convert force back into Mover's velocity
         getVelocity().sum(myAcceleration);
         myAcceleration.reset();
         // move mass by velocity
         super.update(elapsedTime, bounds);
     }
-    
+
     /**
      * checks if mass tries to move out of the screen and keeps it
-     * within boundaries. This method is an attempt to minimize the 
+     * within boundaries. This method is an attempt to minimize the
      * bouncing bug
      */
-    private void checkBoundaries(Dimension bounds){
-    	double centerY = getCenter().y;
-    	double centerX = getCenter().x;
-    	if(getTop() <= 0) setCenter(centerX,DEFAULT_SIZE.getHeight()/2);
+    private void checkBoundaries (Dimension bounds) {
+        double centerY = getCenter().y;
+        double centerX = getCenter().x;
+        if (getTop() <= 0) setCenter(centerX, DEFAULT_SIZE.getHeight() / 2);
 
-    	if(getRight() >= bounds.getWidth()) 
-    		setCenter(bounds.getWidth() - DEFAULT_SIZE.getWidth()/2,centerY);
-    	
-    	if(getBottom() >= bounds.getHeight()) 
-    		setCenter(centerX,bounds.getHeight() - DEFAULT_SIZE.getHeight()/2);
-    	
-    	if(getLeft() <= 0) setCenter(DEFAULT_SIZE.getWidth()/2,centerY);
+        if (getRight() >= bounds.getWidth())
+            setCenter(bounds.getWidth() - DEFAULT_SIZE.getWidth() / 2, centerY);
+
+        if (getBottom() >= bounds.getHeight())
+            setCenter(centerX, bounds.getHeight() - DEFAULT_SIZE.getHeight() / 2);
+
+        if (getLeft() <= 0) setCenter(DEFAULT_SIZE.getWidth() / 2, centerY);
     }
 
     /**
@@ -79,16 +79,16 @@ public class Mass extends Sprite {
     @Override
     public void paint (Graphics2D pen) {
         pen.setColor(Color.BLACK);
-        pen.fillOval((int)getLeft(), (int)getTop(), (int)getWidth(), (int)getHeight());
+        pen.fillOval((int) getLeft(), (int) getTop(), (int) getWidth(), (int) getHeight());
     }
 
     /**
      * Use the given force to change this mass's acceleration.
      */
     public void applyForce (Vector force) {
-    	myAcceleration.sum(force);  		 
+        myAcceleration.sum(force);
     }
-    
+
     /**
      * Convenience method.
      */
@@ -96,7 +96,6 @@ public class Mass extends Sprite {
         // this is a little awkward, so hide it
         return new Location(getX(), getY()).distance(new Location(other.getX(), other.getY()));
     }
-
 
     // check for move out of bounds
     private Vector getBounce (Dimension bounds) {
