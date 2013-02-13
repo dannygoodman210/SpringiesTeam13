@@ -24,7 +24,7 @@ public class Model {
     private List<Mass> myMasses;
     private List<Spring> mySprings;
     private List<Environment> myEnvironmentForces;
-    private Control myControl;
+    //private Control myControl;
     private boolean mouseDragging;
     private Spring myMouseSpring;
 
@@ -36,7 +36,7 @@ public class Model {
         myMasses = new ArrayList<Mass>();
         mySprings = new ArrayList<Spring>();
         myEnvironmentForces = new ArrayList<Environment>();
-        myControl = new Control(myView);
+        //myControl = new Control(myView);
         mouseDragging = false;
     }
     
@@ -60,7 +60,7 @@ public class Model {
         	m.paint(pen);
         }
         
-        myControl.paint(pen);
+        //myControl.paint(pen);
     }
 
     /**
@@ -90,7 +90,7 @@ public class Model {
         }
         	
         
-        myControl.update();
+        //myControl.update();
     }
 
     /**
@@ -106,7 +106,7 @@ public class Model {
      */
     public void add (Environment force) {
         myEnvironmentForces.add(force);
-        myControl.add(force);
+        //myControl.add(force);
     }
 
     /**
