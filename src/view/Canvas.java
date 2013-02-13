@@ -31,7 +31,7 @@ import simulation.Model;
  *   <LI>keyboard input via the KeyListener
  * </UL>
  * 
- * @author Robert C Duvall
+ * @author Robert C Duvall, Danny Goodman
  */
 public class Canvas extends JComponent {
     // default serialization ID
@@ -55,6 +55,7 @@ public class Canvas extends JComponent {
     // input state
     private int myLastKeyPressed;
     private Point myLastMousePosition;
+    private boolean myMousePressed;
     private Set<Integer> myKeys;
 
 
@@ -96,6 +97,14 @@ public class Canvas extends JComponent {
     public int getLastKeyPressed () {
         return myLastKeyPressed;
     }
+    
+    /**
+     * Returns if mouse is being pressed.
+     */
+    public boolean getMousePressed () {
+        return myMousePressed;
+    }
+
 
     /**
      * Returns all keys currently pressed by the user.
@@ -164,6 +173,7 @@ public class Canvas extends JComponent {
             }
         });
         myLastMousePosition = NO_MOUSE_PRESSED;
+        myMousePressed = false;
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged (MouseEvent e) {
@@ -174,11 +184,13 @@ public class Canvas extends JComponent {
             @Override
             public void mousePressed (MouseEvent e) {
                 myLastMousePosition = e.getPoint();
+                myMousePressed = true;
             }
 
             @Override
             public void mouseReleased (MouseEvent e) {
-                myLastMousePosition = NO_MOUSE_PRESSED;
+                myLastMousePosition = e.getPoint();
+                myMousePressed = false;
             }
         });
     }
