@@ -21,9 +21,7 @@ import view.Canvas;
 public class Model {
 	
     // bounds and input for game
-    private Canvas myView;
-    
-    private Factory myFactory; 
+    private Canvas myView; 
     
     // simulation state
     private List<Mass> myMasses;
@@ -37,18 +35,13 @@ public class Model {
     /**
      * Create a game of the given size with the given display for its shapes.
      */
-    public Model (Canvas canvas, Factory factory) {
+    public Model (Canvas canvas) {
         myView = canvas;
-        myFactory = factory; 
         myMasses = new ArrayList<Mass>();
         mySprings = new ArrayList<Spring>();
         myEnvironmentForces = new ArrayList<Environment>();
-<<<<<<< HEAD
-        //myControl = new Control(myView);
+        myControl = new Control(myView);
         mouseDragging = false;
-=======
-        myControl = new Control(myView, myFactory);
->>>>>>> 68537f9ab2980ca0ae7cdccf062c96f7077d9ea8
     }
     
     /**
@@ -71,7 +64,7 @@ public class Model {
         	m.paint(pen);
         }
         
-        //myControl.paint(pen);
+        myControl.paint(pen);
     }
 
     /**
@@ -89,7 +82,7 @@ public class Model {
             m.update(elapsedTime, bounds);
         }
         
-        //myControl.update();
+        myControl.update(myEnvironmentForces);
     }
 
     /**
@@ -105,7 +98,6 @@ public class Model {
      */
     public void add (Environment force) {
         myEnvironmentForces.add(force);
-        //myControl.add(force);
     }
 
     /**
@@ -119,9 +111,4 @@ public class Model {
     	myMasses.clear(); 
     	mySprings.clear(); 
     }
-    
-    public Model getModel() { 
-    	return this; 
-    }
-    
 }

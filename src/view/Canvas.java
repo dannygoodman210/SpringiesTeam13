@@ -31,7 +31,7 @@ import simulation.Model;
  *   <LI>keyboard input via the KeyListener
  * </UL>
  * 
- * @author Robert C Duvall
+ * @author Henrique Moraes, Danny Goodman, Thomas Varner
  */
 public class Canvas extends JComponent {
     // default serialization ID
@@ -45,8 +45,8 @@ public class Canvas extends JComponent {
     private static final JFileChooser INPUT_CHOOSER = 
             new JFileChooser(System.getProperties().getProperty("user.dir"));
     // input state
-    public static final int NO_KEY_PRESSED = -1;
     public static final Point NO_MOUSE_PRESSED = null;
+    public static final int NO_KEY_PRESSED = -1;
 
     // drives the animation
     private Timer myTimer;
@@ -57,7 +57,8 @@ public class Canvas extends JComponent {
     private Point myLastMousePosition;
     private Set<Integer> myKeys;
     // new elements to be created
-    private Factory myFactory; 
+    private Factory myFactory;
+    private boolean isEnvironmentLoaded = false;
 
     /**
      * Create a panel so that it knows its size
@@ -98,13 +99,6 @@ public class Canvas extends JComponent {
         return myLastKeyPressed;
     }
 
-    /*
-     * Resets the value of the last key. This was particularly useful
-     * with key listener interaction with the dialogue box
-     */
-    public void resetLastKey () { 
-    	myLastKeyPressed = -1; 
-    }
     /**
      * Returns all keys currently pressed by the user.
      */
@@ -133,7 +127,7 @@ public class Canvas extends JComponent {
         Factory factory = new Factory();
         myFactory = factory; 
         // start animation
-        mySimulation = new Model(this, myFactory);
+        mySimulation = new Model(this);
         loadModel();
         myTimer.start();
     }
@@ -165,7 +159,6 @@ public class Canvas extends JComponent {
      */
     private void setInputListeners () {
         // initialize input state
-    	
     	myLastKeyPressed = NO_KEY_PRESSED;
         myKeys = new TreeSet<Integer>();
         addKeyListener(new KeyAdapter() {
@@ -201,14 +194,21 @@ public class Canvas extends JComponent {
     }
 
     // load model from file chosen by user
-    private void loadModel () {
+    public void loadModel () {
         int response = INPUT_CHOOSER.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
             myFactory.loadModel(mySimulation, INPUT_CHOOSER.getSelectedFile());
         }
+        myLastKeyPressed = NO_KEY_PRESSED;
+        if (isEnvironmentLoaded) { return; }
         response = INPUT_CHOOSER.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
         	myFactory.loadEnvironment(mySimulation, INPUT_CHOOSER.getSelectedFile());
+        	isEnvironmentLoaded = true;
         }
+    }
+
+    public void clear () {
+        mySimulation.clear();
     }
 }

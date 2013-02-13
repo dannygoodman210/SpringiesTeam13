@@ -41,13 +41,10 @@ public abstract class Environment {
 	}
 	
 	/**
-	 * toggles the force of this object on and off
+	 * toggles the force of the object on and off
 	 * @return this force
 	 */
-	public Environment toggleForce(){
-		isForceOn = !isForceOn;
-		return this;
-	}
+	public abstract Environment toggleForce(int key);
 	
 	/**
 	 * Makes a force subclass apply its own force on each mass 

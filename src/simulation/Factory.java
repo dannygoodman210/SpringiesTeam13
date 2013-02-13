@@ -54,7 +54,7 @@ public class Factory {
      */
     public void loadModel (Model model, File modelFile) {
         try {
-        	myModel = model; 
+            myModel = model;
             Scanner input = new Scanner(modelFile);
             while (input.hasNext()) {
                 Scanner line = new Scanner(input.nextLine());
@@ -110,20 +110,6 @@ public class Factory {
         catch (FileNotFoundException e) {
             // should not happen because File came from user selection
             e.printStackTrace();
-        }
-    }
-    
-    public void clear() { 
-    	myModel.clear(); 
-    }
-    
-    /*
-     * loads additional model objects from file 
-     */
-    public void loadNewModel() { 
-    	int response = INPUT_CHOOSER.showOpenDialog(null);
-        if (response == JFileChooser.APPROVE_OPTION) {
-            loadModel(myModel, INPUT_CHOOSER.getSelectedFile());
         }
     }
 
