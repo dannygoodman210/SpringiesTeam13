@@ -147,22 +147,23 @@ public class Model {
         Mass mass = findClosestMass(mouseLocation);
         myMouseSpring = new Spring(mass,
                                    new Mass(myView.getLastMousePosition(), DEFAULT_MASS),
-                                   massDist(mass, mouseLocation), DEFAULT_KVAL);
+                                   getDistanceFromMass(mass, mouseLocation), DEFAULT_KVAL);
         mySprings.add(myMouseSpring);
     }
 
-    private double massDist (Mass mass, Point mouseLocation) {
+    private double getDistanceFromMass (Mass mass, Point mouseLocation) {
         return mouseLocation.distance(mass.getX(), mass.getY());
     }
 
     private Mass findClosestMass (Point mouseLocation) {
-        Mass closeMass = myMasses.get(0);
+        Mass closestMass = myMasses.get(0);
         for (Mass m : myMasses) {
-            if (massDist(m, mouseLocation) < massDist(closeMass, mouseLocation)) {
-                closeMass = m;
+            if (getDistanceFromMass(m, mouseLocation) < 
+                    getDistanceFromMass(closestMass, mouseLocation)) {
+                closestMass = m;
             }
         }
-        return closeMass;
+        return closestMass;
     }
 
     private void updateDrag (Point mouseLocation) {

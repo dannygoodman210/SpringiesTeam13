@@ -30,9 +30,13 @@ public class Mass extends Sprite {
         myAcceleration = new Vector();
     }
 
-    // alternate constructor for given Point
-    public Mass(Point xy, double mass){
-        this(xy.x,xy.y,mass);
+    /**
+     *  alternate constructor for given Point
+     * @param point Location of the mass
+     * @param mass the mass of the ass
+     */
+    public Mass(Point point, double mass) {
+        this(point.x, point.y, mass);
     }
 
     /**
@@ -69,15 +73,21 @@ public class Mass extends Sprite {
     private void checkBoundaries (Dimension bounds) {
         double centerY = getCenter().y;
         double centerX = getCenter().x;
-        if (getTop() <= 0) setCenter(centerX, DEFAULT_SIZE.getHeight() / 2);
+        if (getTop() <= 0) {
+            setCenter(centerX, DEFAULT_SIZE.getHeight() / 2);
+        }
 
-        if (getRight() >= bounds.getWidth())
+        if (getRight() >= bounds.getWidth()) {
             setCenter(bounds.getWidth() - DEFAULT_SIZE.getWidth() / 2, centerY);
+        }
 
-        if (getBottom() >= bounds.getHeight())
+        if (getBottom() >= bounds.getHeight()) {
             setCenter(centerX, bounds.getHeight() - DEFAULT_SIZE.getHeight() / 2);
+        }
 
-        if (getLeft() <= 0) setCenter(DEFAULT_SIZE.getWidth() / 2, centerY);
+        if (getLeft() <= 0) {
+            setCenter(DEFAULT_SIZE.getWidth() / 2, centerY);
+        }
     }
 
     /**

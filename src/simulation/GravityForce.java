@@ -15,23 +15,14 @@ public class GravityForce extends Environment {
 
     private Vector myGravity;
 
+    /**
+     * Constructor that represents the gravity force on the model
+     * @param angle direction of the force
+     * @param magnitude magnitude of the force
+     */
     public GravityForce (double angle, double magnitude) {
         myGravity = new Vector(angle, magnitude);
         myName = "Gravity";
-    }
-
-    /**
-     * Receives a gravity vector and assigns it to its private variable
-     */
-    public void setGravity (Vector gravity) {
-        myGravity = gravity;
-    }
-
-    /**
-     * Returns gravity vector to the caller
-     */
-    public Vector getGravity () {
-        return myGravity;
     }
 
     /**

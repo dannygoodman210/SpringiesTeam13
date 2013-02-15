@@ -30,6 +30,13 @@ public class WallRepulsionForce extends Environment {
     private double myExponentialIndex;
     private int myKeyConstant;
 
+    /**
+     * Constructor that represents the wall repulsion force of the model
+     * @param ID ID of the wall
+     * @param direction direction of the force
+     * @param magnitude Magnitude of the force
+     * @param exponent Exponent of the distance
+     */
     public WallRepulsionForce (int ID, double direction,
                                double magnitude, double exponent) {
         myID = ID;

@@ -15,23 +15,13 @@ public class ViscosityForce extends Environment {
 
     private double myViscosity;
 
+    /**
+     * Constructor that represents the viscosity force of the model
+     * @param viscosity scaling factor for the viscosity
+     */
     public ViscosityForce (double viscosity) {
         myViscosity = viscosity;
         myName = "Viscosity";
-    }
-
-    /**
-     * Assigns the value to the viscosity of the environment
-     */
-    public void setViscosity (double viscosity) {
-        myViscosity = viscosity;
-    }
-
-    /**
-     * retrieves the viscosity value from the environment
-     */
-    public double getViscosity () {
-        return myViscosity;
     }
 
     /**

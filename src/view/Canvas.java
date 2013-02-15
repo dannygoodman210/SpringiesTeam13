@@ -209,6 +209,7 @@ public class Canvas extends JComponent {
         }
         myLastKeyPressed = NO_KEY_PRESSED;
         if (myEnvironmentLoaded) { return; }
+        
         response = INPUT_CHOOSER.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
             factory.loadEnvironment(mySimulation, INPUT_CHOOSER.getSelectedFile());
