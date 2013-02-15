@@ -34,21 +34,25 @@ public class Factory {
     private static final double DEFAULT_CENTERMASS_MAGNITUDE = 10;
     private static final double DEFAULT_CENTERMASS_EXPONENT = 0;
 
+    @SuppressWarnings("unused")
     private static final JFileChooser INPUT_CHOOSER =
             new JFileChooser(System.getProperties().getProperty("user.dir"));
 
     // to ease constructing wall statuses
-    private static final double[] WALL_FORCE_DIRECTIONS =
-    { WallRepulsionForce.DOWN_DIRECTION, WallRepulsionForce.LEFT_DIRECTION,
-     WallRepulsionForce.UP_DIRECTION, WallRepulsionForce.RIGHT_DIRECTION };
+    private static final double[] WALL_FORCE_DIRECTIONS = {
+        WallRepulsionForce.DOWN_DIRECTION, WallRepulsionForce.LEFT_DIRECTION,
+        WallRepulsionForce.UP_DIRECTION, WallRepulsionForce.RIGHT_DIRECTION };
 
     // mass IDs
-    Map<Integer, Mass> myMasses = new HashMap<Integer, Mass>();
+    private Map<Integer, Mass> myMasses = new HashMap<Integer, Mass>();
 
     private Model myModel;
 
     /**
-     * XXX.
+     * Loads an assembly from a data file.
+     * 
+     * @param model : the model it will load the assembly into.
+     * @param modelFile : the file the assembly is loaded from.
      */
     public void loadModel (Model model, File modelFile) {
         try {
@@ -78,7 +82,10 @@ public class Factory {
     }
 
     /**
-     * XXX.
+     * Load Environment forces into the model.
+     * 
+     * @param model : the model it will load the assembly into.
+     * @param modelFile : the file the assembly is loaded from. 
      */
     public void loadEnvironment (Model model, File modelFile) {
         try {
@@ -118,9 +125,12 @@ public class Factory {
         double y = line.nextDouble();
         double mass = line.nextDouble();
         Mass result;
-        if (mass > 0)
+        if (mass > 0) {
             result = new Mass(x, y, mass);
-        else result = new FixedMass(x, y, mass);
+        }
+        else {
+            result = new FixedMass(x, y, mass);
+        }
         myMasses.put(id, result);
         return result;
     }
@@ -146,8 +156,9 @@ public class Factory {
 
     // add gravity information to the Model
     private GravityForce gravityCommand (Scanner line) {
-        if (!line.hasNextDouble())
+        if (!line.hasNextDouble()) {
             return new GravityForce(DEFAULT_GRAVITY_DIRECTION, DEFAULT_GRAVITY_MAGNITUDE);
+        }
 
         double angle = line.nextDouble();
         double magnitude = line.nextDouble();
@@ -156,16 +167,17 @@ public class Factory {
 
     // reads viscosity information
     private ViscosityForce viscosityCommand (Scanner line) {
-        if (!line.hasNextDouble())
+        if (!line.hasNextDouble()) {
             return new ViscosityForce(DEFAULT_VISCOSITY_SCALE);
-
+        }
         return new ViscosityForce(line.nextDouble());
     }
 
     // reads center of mass parameters
     private CenterMassForce centerMassCommand (Scanner line) {
-        if (!line.hasNextDouble())
+        if (!line.hasNextDouble()) {
             return new CenterMassForce(DEFAULT_CENTERMASS_MAGNITUDE, DEFAULT_CENTERMASS_EXPONENT);
+        }
 
         double magnitude = line.nextDouble();
         double exponent = line.nextDouble();
@@ -174,14 +186,15 @@ public class Factory {
 
     // Reads wall parameters
     private WallRepulsionForce wallCommand (Scanner line) {
-        int ID = line.nextInt();
-        if (!line.hasNextDouble())
-            return new WallRepulsionForce(ID, WALL_FORCE_DIRECTIONS[ID - 1],
+        int id = line.nextInt();
+        if (!line.hasNextDouble()) {
+            return new WallRepulsionForce(id, WALL_FORCE_DIRECTIONS[id - 1],
                                           DEFAULT_WALL_MAGNITUDE, DEFAULT_WALL_EXPONENT);
+        }
 
         double magnitude = line.nextDouble();
         double exponent = line.nextDouble();
-        return new WallRepulsionForce(ID, WALL_FORCE_DIRECTIONS[ID - 1],
+        return new WallRepulsionForce(id, WALL_FORCE_DIRECTIONS[id - 1],
                                       magnitude, exponent);
     }
 

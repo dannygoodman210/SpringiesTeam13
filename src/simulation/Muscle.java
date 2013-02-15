@@ -10,10 +10,11 @@ import java.awt.Dimension;
  */
 public class Muscle extends Spring {
 
-    protected double myAmplitude;
-    protected double myInitLength;
-    private static final double RADIANS_PER_FRAME = Math.PI / 100;
-    protected double myPhase;
+    private static final int FRAME_RATE_DENOM = 100;
+    private static final double RADIANS_PER_FRAME = Math.PI / FRAME_RATE_DENOM;
+    private double myAmplitude;
+    private double myInitLength;
+    private double myPhase;
 
     /**
      * Constructor for Muscle. Different from Spring Constructor in that it adds amplitude.
@@ -45,7 +46,7 @@ public class Muscle extends Spring {
     }
 
     private void updateRestLength () {
-        myLength = myInitLength * (1 + myAmplitude * Math.sin(myPhase));
+        setLength(myInitLength * (1 + myAmplitude * Math.sin(myPhase)));
         myPhase += RADIANS_PER_FRAME;
     }
 

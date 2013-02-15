@@ -3,27 +3,28 @@ package simulation;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import view.Canvas;
 
 
 /**
- * XXX.
+ * Model class. Contains all assemblies and their various
+ * masses and springs.
  * 
  * @author Henrique Moraes, Danny Goodman, Thomas Varner
  */
 public class Model {
+    // constants for mouse dragging
+    private static final double DEFAULT_MASS = 10;
+    private static final double DEFAULT_KVAL = 0.5;
 
     // bounds and input for game
     private Canvas myView;
 
-	//constants for mouse dragging
-    private static final double DEFAULT_MASS = 10;
-    private static final double DEFAULT_KVAL = 0.5;
     // for mouse dragging
-    private boolean mouseDragging;
-    private Spring myMouseSpring; 
+    private boolean myMouseDragging;
+    private Spring myMouseSpring;
 
     // simulation state
     private List<Mass> myMasses;
@@ -35,6 +36,8 @@ public class Model {
 
     /**
      * Create a game of the given size with the given display for its shapes.
+     * 
+     * @param canvas : The view for the Model.
      */
     public Model (Canvas canvas) {
         myView = canvas;
@@ -42,7 +45,7 @@ public class Model {
         mySprings = new ArrayList<Spring>();
         myEnvironmentForces = new ArrayList<Environment>();
         myControl = new Control(myView);
-        mouseDragging = false;
+        myMouseDragging = false;
     }
 
     /**
@@ -55,6 +58,8 @@ public class Model {
 
     /**
      * Draw all elements of the simulation.
+     * 
+     * @param pen : Graphics 2D object painting in Canvas class.
      */
     public void paint (Graphics2D pen) {
         for (Spring s : mySprings) {
@@ -70,6 +75,8 @@ public class Model {
 
     /**
      * Update simulation for this moment, given the time since the last moment.
+     * 
+     * @param elapsedTime : time since last update
      */
     public void update (double elapsedTime) {
         Dimension bounds = myView.getSize();
@@ -83,13 +90,13 @@ public class Model {
             m.update(elapsedTime, bounds);
         }
 
-        if (myView.getMousePressed()&&!mouseDragging){
+        if (myView.getMousePressed() && !myMouseDragging) {
             createMouseSpring();
-            mouseDragging = true;
+            myMouseDragging = true;
         }
-        if(mouseDragging){
-            if(!myView.getMousePressed()){
-                mouseDragging = false;
+        if (myMouseDragging) {
+            if (!myView.getMousePressed()) {
+                myMouseDragging = false;
                 mySprings.remove(myMouseSpring);
             }
             updateDrag(myView.getLastMousePosition());
@@ -100,6 +107,8 @@ public class Model {
 
     /**
      * Add given mass to this simulation.
+     * 
+     * @param mass : new mass to be added to Model.
      */
     public void add (Mass mass) {
         myMasses.add(mass);
@@ -108,6 +117,8 @@ public class Model {
     /**
      * Add given force to the list of this simulation and make
      * an individual reference to it
+     * 
+     * @param force : one of the four forces that extend Environment
      */
     public void add (Environment force) {
         myEnvironmentForces.add(force);
@@ -115,41 +126,47 @@ public class Model {
 
     /**
      * Add given spring to this simulation.
+     * 
+     * @param spring : new spring to be added to the Model.
      */
     public void add (Spring spring) {
         mySprings.add(spring);
     }
 
+    /**
+     * Clear all masses and springs from Model.
+     */
     public void clear () {
         myMasses.clear();
         mySprings.clear();
     }
 
     // Four private methods for Mouse Dragging
-    private void createMouseSpring() {
+    private void createMouseSpring () {
         Point mouseLocation = myView.getLastMousePosition();
         Mass mass = findClosestMass(mouseLocation);
         myMouseSpring = new Spring(mass,
-                new Mass(myView.getLastMousePosition(),DEFAULT_MASS),
-                massDist(mass,mouseLocation),DEFAULT_KVAL);
+                                   new Mass(myView.getLastMousePosition(), DEFAULT_MASS),
+                                   massDist(mass, mouseLocation), DEFAULT_KVAL);
         mySprings.add(myMouseSpring);
     }
 
-    private double massDist(Mass mass, Point mouseLocation) {
-        return mouseLocation.distance(mass.getX(),mass.getY());
+    private double massDist (Mass mass, Point mouseLocation) {
+        return mouseLocation.distance(mass.getX(), mass.getY());
     }
 
-    private Mass findClosestMass(Point mouseLocation) {
+    private Mass findClosestMass (Point mouseLocation) {
         Mass closeMass = myMasses.get(0);
-        for(Mass m:myMasses){
-            if(massDist(m,mouseLocation) < massDist(closeMass,mouseLocation))
+        for (Mass m : myMasses) {
+            if (massDist(m, mouseLocation) < massDist(closeMass, mouseLocation)) {
                 closeMass = m;
+            }
         }
         return closeMass;
     }
-    
-    private void updateDrag(Point mouseLocation){
+
+    private void updateDrag (Point mouseLocation) {
         myMouseSpring.getEndMass().setCenter(
-                mouseLocation.getX(), mouseLocation.getY());
+                                             mouseLocation.getX(), mouseLocation.getY());
     }
 }

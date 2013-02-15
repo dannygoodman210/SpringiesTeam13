@@ -7,8 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -37,16 +37,16 @@ public class Canvas extends JComponent {
     // default serialization ID
     private static final long serialVersionUID = 1L;
     // animate 25 times per second if possible
-    public static final int FRAMES_PER_SECOND = 25;
+    private static final int FRAMES_PER_SECOND = 25;
     // better way to think about timed events (in milliseconds)
-    public static final int ONE_SECOND = 1000;
-    public static final int DEFAULT_DELAY = ONE_SECOND / FRAMES_PER_SECOND;
+    private static final int ONE_SECOND = 1000;
+    private static final int DEFAULT_DELAY = ONE_SECOND / FRAMES_PER_SECOND;
     // only one so that it maintains user's preferences
     private static final JFileChooser INPUT_CHOOSER =
             new JFileChooser(System.getProperties().getProperty("user.dir"));
     // input state
-    public static final Point NO_MOUSE_PRESSED = null;
-    public static final int NO_KEY_PRESSED = -1;
+    private static final Point NO_MOUSE_PRESSED = null;
+    private static final int NO_KEY_PRESSED = -1;
 
     // drives the animation
     private Timer myTimer;
@@ -58,10 +58,12 @@ public class Canvas extends JComponent {
     private boolean myMousePressed;
     private Set<Integer> myKeys;
     // new elements to be created
-    private boolean isEnvironmentLoaded = false;
+    private boolean myEnvironmentLoaded = false;
 
     /**
      * Create a panel so that it knows its size
+     * 
+     * @param size : Dimensions of Canvas
      */
     public Canvas (Dimension size) {
         // set size (a bit of a pain)
@@ -126,11 +128,11 @@ public class Canvas extends JComponent {
     public void start () {
         // create a timer to animate the canvas
         myTimer = new Timer(DEFAULT_DELAY,
-                            new ActionListener() {
-                                public void actionPerformed (ActionEvent e) {
-                                    step();
-                                }
-                            });
+            new ActionListener() {
+                public void actionPerformed (ActionEvent e) {
+                    step();
+                }
+            });
         // start animation
         mySimulation = new Model(this);
         loadModel();
@@ -196,7 +198,9 @@ public class Canvas extends JComponent {
         });
     }
 
-    // load model from file chosen by user
+    /** 
+     * load Model from file chosen by user
+     */
     public void loadModel () {
         Factory factory = new Factory();
         int response = INPUT_CHOOSER.showOpenDialog(null);
@@ -204,14 +208,17 @@ public class Canvas extends JComponent {
             factory.loadModel(mySimulation, INPUT_CHOOSER.getSelectedFile());
         }
         myLastKeyPressed = NO_KEY_PRESSED;
-        if (isEnvironmentLoaded) { return; }
+        if (myEnvironmentLoaded) { return; }
         response = INPUT_CHOOSER.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
             factory.loadEnvironment(mySimulation, INPUT_CHOOSER.getSelectedFile());
-            isEnvironmentLoaded = true;
+            myEnvironmentLoaded = true;
         }
     }
 
+    /**
+     * clear the Model.
+     */
     public void clear () {
         mySimulation.clear();
     }

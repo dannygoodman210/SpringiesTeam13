@@ -10,22 +10,27 @@ import util.Vector;
 
 
 /**
- * XXX.
+ * Spring class extends Sprite class. Connects two Mass objects together by a Spring.
+ * Applies forces on Mass objects when spring is stretched or compressed from rest length.
  * 
  * @author Robert C. Duvall, Danny Goodman
  */
 public class Spring extends Sprite {
-    // reasonable default values
-    public static final Pixmap DEFUALT_IMAGE = new Pixmap("spring.gif");
-    public static final int IMAGE_HEIGHT = 20;
 
-    protected Mass myStart;
-    protected Mass myEnd;
-    protected double myLength;
-    protected double myK;
+    private static final Pixmap DEFUALT_IMAGE = new Pixmap("spring.gif");
+    private static final int IMAGE_HEIGHT = 20;
+    private Mass myStart;
+    private Mass myEnd;
+    private double myLength;
+    private double myK;
 
     /**
-     * XXX.
+     * Spring Constructor. Initializes parameters and calls super class Sprite constructor.
+     * 
+     * @param start : Mass 1 connected by Spring
+     * @param end : Mass 2 connected by Spring
+     * @param length : Rest length of Spring
+     * @param kVal : Stiffness
      */
     public Spring (Mass start, Mass end, double length, double kVal) {
         super(DEFUALT_IMAGE, getCenter(start, end), getSize(start, end));
@@ -35,16 +40,20 @@ public class Spring extends Sprite {
         myK = kVal;
     }
 
-        /**
-     * return the end mass of the spring.
-     * @return 
+    /**
+     * Return the end mass of the spring.
+     * 
+     * @return Mass myEnd. instance variable of Mass 2 connected by Spring
      */
-    public Mass getEndMass(){
+    public Mass getEndMass () {
         return myEnd;
     }
 
     /**
-     * XXX.
+     * Draws Spring as a Line between two masses with a color dependent on whether
+     * Spring is compressed or stretched.
+     * 
+     * @param pen : Graphics 2D object painting in Canvas class
      */
     @Override
     public void paint (Graphics2D pen) {
@@ -54,7 +63,10 @@ public class Spring extends Sprite {
     }
 
     /**
-     * XXX.
+     * Updates length of Spring and force that it applies to Mass objects.
+     * 
+     * @param elapsedTime : Time elapsed since last update
+     * @param bounds : Bounds of JFrame window for bouncing purposes
      */
     @Override
     public void update (double elapsedTime, Dimension bounds) {
@@ -73,23 +85,50 @@ public class Spring extends Sprite {
     }
 
     /**
-     * Convenience method.
+     * Convenience method. Colors the Spring differently for stretching and compressing.
+     * 
+     * @param diff : length of Spring minus rest length.
+     * @return Color of Spring dependent on spring length.
      */
     protected Color getColor (double diff) {
-        if (Vector.fuzzyEquals(diff, 0))
+        if (Vector.fuzzyEquals(diff, 0)) {
             return Color.BLACK;
-        else if (diff < 0.0)
+        }
+        else if (diff < 0.0) {
             return Color.BLUE;
-        else return Color.RED;
+        }
+        else {
+            return Color.RED;
+        }
     }
 
-    // compute center of this spring
+    /**
+     * Compute center of this spring
+     * 
+     * @param start : Mass 1 connected to Spring
+     * @param end : Mass 2 connected to Spring
+     * @return Center of Spring
+     */
     protected static Location getCenter (Mass start, Mass end) {
         return new Location((start.getX() + end.getX()) / 2, (start.getY() + end.getY()) / 2);
     }
 
-    // compute size of this spring
+    /**
+     * Compute size of this spring
+     * 
+     * @param start : Mass 1 connected to Spring
+     * @param end : Mass 2 connected to Spring
+     * @return Size of Spring
+     */
     protected static Dimension getSize (Mass start, Mass end) {
         return new Dimension((int) start.distance(end), IMAGE_HEIGHT);
+    }
+
+    protected double getLength () {
+        return myLength;
+    }
+
+    protected void setLength (double length) {
+        myLength = length;
     }
 }
