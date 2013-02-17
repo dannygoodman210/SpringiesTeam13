@@ -1,0 +1,45 @@
+README: SPRINGIES
+
+NAMES: 
+Danny Goodman (pdg7@duke.edu)
+Henrique Moraes (hrm8@duke.edu)
+Tom Varner (tgv@duke.edu)
+
+DATE STARTED: 
+Jan. 24, 2013
+
+DATE FINISHED: 
+Feb. 13, 2013
+
+PROJECT REPOSITORY: 
+https://github.com/dannygoodman210/SpringiesTeam13
+
+ROLES: 
+We divided the work evenly across Parts 2 and 3 of the project, where each person was responsible for 1-2 added functionalities
+
+RESOURCES: 
+-n/a
+
+FILES USED TO START THE PROJECT: 
+Framework was provided by professor Robert Duvall
+
+DATA OR RESOURCE FILES REQUIRED by PROJECT:
+In order for the program to run, files must be uploaded in this order: 
+(1) A text file for assemblies (masses, springs, muscles, etc.) 
+(2) A text file for the environment (gravity, viscosity, etc.)
+
+INFORMATION FOR RUNNING THE PROGRAM: 
+(see DATA OR RESOURCE FILES REQUIRED by PROJECT) 
+
+KNOWN BUGS, CRASHES OR PROBLEMS: 
+-n/a
+
+EXTRA FEATURES: 
+-n/a
+
+IMPRESSIONS OF THE ASSIGNMENT: 
+The assignment was very fun and a logical means of extending what we learned/developed in the Game assignment. 
+We worked very hard to devise and implement a solid design based on everything we've learned in class thus far, 
+and we are eager to recieve feedback and to understand better design practices going forward. 
+ 
+
